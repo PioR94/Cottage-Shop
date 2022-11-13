@@ -1,5 +1,5 @@
 <template>
-  <button :type='type' :class='mode'>
+  <button :class='mode'>
     <slot></slot>
   </button>
 
@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  props: ['type', 'mode']
+  props: ['mode']
 }
 </script>
 
@@ -22,20 +22,43 @@ button {
   cursor: pointer;
 }
 
-button:hover,
-button:active {
+button:hover {
   background-color: #270041;
   border-color: #270041;
 }
 
-.flat {
+.err-btn {
+  position: absolute;
+  border: none;
+  padding: 0.25rem 0.5rem;
   background-color: transparent;
-  color: #3a0061;
+  right: 0;
+  top: 0;
+  color: black;
+  font-size: 15px;
+;
+}
+.err-btn:hover {
+  background-color: transparent;
+  color: wheat;
+}
+
+.buy {
+  width: 100px;
+}
+
+.change-currency {
+
+  background-color: transparent;
+  color: black;
+  font-size: 15px;
   border: none;
 }
 
-.flat:hover,
-.flat:active {
-  background-color: #edd2ff;
+.change-currency:hover {
+  background-color: transparent;
+  color: blueviolet;
 }
+
+
 </style>

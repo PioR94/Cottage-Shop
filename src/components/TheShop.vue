@@ -1,10 +1,14 @@
 <template>
-  <section>
-  <the-button @click="setSelectedComponent('list-pet-house')">Domki</the-button>
+  <section class="changeComponent">
+    <the-button @click="setSelectedComponent('list-pet-house')">Domki</the-button>
   <the-button @click="setSelectedComponent('add-item')">Dodaj produkt</the-button>
   <the-button @click="setSelectedComponent('the-basket')">Koszyk</the-button>
+  <the-button @click="sortByPriceDown">Cena malejąco</the-button>
+  <the-button @click="sortByPriceUp" >Cena rosnąco</the-button>
   </section>
+  <keep-alive>
   <component :is="selectedComponent"></component>
+  </keep-alive>
 </template>
 
 <script>
@@ -25,33 +29,36 @@ export default {
   },
   data() {
     return {
+
       shopItems: [
         {
           id: uuid(),
           name: 'Dziupla',
           typeOfHouse: 'domek na drzewie',
           typeOfAnimal: 'sowa',
-          price: '200',
-          quantity: 1,
-          description: "Lorem LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLor emLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem",
+          price: 200,
+          description: "Lorem Lorem Lorem Lorem Lorem  Lorem  Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ",
         },
         {
           id: uuid(),
           name: 'Jaskinia',
           typeOfHouse: 'domek na ziemi',
           typeOfAnimal: 'niedźwiedź',
-          price: '300',
-          quantity: 4,
+          price: 300,
           description: "Lorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem LoLorem Lo",
         },
       ],
       selectedComponent: 'list-pet-house',
+      basket: [],
     }
   },
   provide() {
     return {
       shopItems: this.shopItems,
       addHouse: this.addHouse,
+      addToBasket: this.addToBasket,
+      basket: this.basket,
+      removeItem: this.removeItem,
     }
   },
   computed: {
@@ -62,14 +69,13 @@ export default {
         this.selectedComponent = active;
     },
 
-    addHouse(name, typeOfHouse, typeOfAnimal, price, quantity, description ) {
+    addHouse(name, typeOfHouse, typeOfAnimal, price, description ) {
       const item = {
         id: uuid(),
         name: name,
         typeOfHouse: typeOfHouse,
         typeOfAnimal: typeOfAnimal,
         price: price,
-        quantity: quantity,
         description: description,
       };
 
@@ -77,6 +83,27 @@ export default {
       this.selectedComponent = 'list-pet-house';
     },
 
+    sortByPriceUp() {
+      this.shopItems.sort((a, b) => a.price > b.price ? 1 : -1)
+    },
+    sortByPriceDown() {
+      this.shopItems.sort((a, b) => a.price < b.price ? 1 : -1)
+    },
+    addToBasket(id, name, price) {
+      const item = {
+        id,
+        name,
+        price,
+      };
+
+      const result = this.basket.find(data => data.id === item.id );
+      if (!result) this.basket.unshift(item);
+
+    },
+    removeItem(id) {
+      const result = this.basket.findIndex(res => res.id === id);
+      this.basket.splice(result, 1);
+    }
   }
 
 }
@@ -84,6 +111,11 @@ export default {
 
 
 <style scoped>
+.changeComponent {
+  display: flex;
+  justify-content: center;
 
+
+}
 
 </style>
